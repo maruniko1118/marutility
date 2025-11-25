@@ -1,64 +1,108 @@
 <h2>電卓</h2>
 <style>
-    /* 白黒ベース */
-    .calc-wrapper { max-width: 320px; margin: 0 auto; background: #fff; padding: 20px; border: 1px solid #ddd; border-radius: 12px; }
-    .calc-display { background: #f9f9f9; padding: 20px; text-align: right; font-size: 2.5rem; border-radius: 8px; margin-bottom: 15px; font-family: monospace; color: #333; }
-    .calc-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
-    
-    .calc-btn { 
-        padding: 20px 0; font-size: 1.2rem; border: none; border-radius: 8px; 
-        background: #f0f0f0; color: #333; cursor: pointer; transition: 0.1s; 
+    /* モダンで丸みを帯びたデザイン */
+    .calc-container {
+        max-width: 350px;
+        margin: 0 auto;
     }
-    .calc-btn:hover { background: #e0e0e0; }
+
+    .calc-display {
+        background-color: transparent;
+        padding: 20px 10px;
+        text-align: right;
+        font-size: 3rem;
+        margin-bottom: 20px;
+        color: var(--text-main);
+        font-weight: 300;
+        border-bottom: 1px solid var(--border-color);
+        min-height: 80px;
+        word-break: break-all;
+    }
+
+    .calc-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 12px;
+    }
     
-    /* 演算子は赤系 */
-    .calc-btn.op { background: #b3261e; color: white; }
-    .calc-btn.op:hover { background: #901e18; }
+    .calc-btn {
+        aspect-ratio: 1; /* 正円にする */
+        border: none;
+        border-radius: 50%;
+        background-color: var(--bg-sidebar); /* 薄いグレー */
+        color: var(--text-main);
+        font-size: 1.5rem;
+        cursor: pointer;
+        transition: all 0.2s;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-shadow: 0 2px 5px var(--shadow-color);
+    }
+
+    .calc-btn:hover {
+        background-color: var(--hover-bg);
+        transform: translateY(-2px);
+    }
     
-    /* クリアは濃いグレーまたは黒 */
-    .calc-btn.clear { background: #444; color: white; }
-    .calc-btn.clear:hover { background: #222; }
+    .calc-btn:active {
+        transform: scale(0.95);
+    }
+
+    /* 数字キー */
+    .calc-btn.num {
+        font-weight: 500;
+    }
+
+    /* 演算子 (アクセントカラー) */
+    .calc-btn.op {
+        background-color: var(--bg-sidebar);
+        color: var(--accent-red);
+        font-weight: bold;
+        font-size: 1.8rem;
+    }
+    .calc-btn.op:hover {
+        background-color: #fce8e6; /* 薄い赤 */
+    }
+    /* ダークモードでのホバー調整 */
+    [data-theme="dark"] .calc-btn.op:hover {
+        background-color: #3e2723;
+    }
+
+    /* イコールボタン (目立たせる) */
+    .calc-btn.eq {
+        background-color: var(--accent-red);
+        color: #fff;
+    }
+    .calc-btn.eq:hover {
+        opacity: 0.9;
+    }
+    [data-theme="dark"] .calc-btn.eq { color: #331200; }
+
+    /* クリアボタン */
+    .calc-btn.clear {
+        color: var(--accent-red);
+        font-size: 1.2rem;
+    }
+
 </style>
 
-<div class="calc-wrapper">
+<div class="calc-container">
     <div class="calc-display" id="calc-display">0</div>
     <div class="calc-grid">
-        <button class="calc-btn clear" onclick="calcApp.clear()">C</button>
+        <button class="calc-btn clear" onclick="calcApp.clear()">AC</button>
         <button class="calc-btn op" onclick="calcApp.setOp('/')">÷</button>
         <button class="calc-btn op" onclick="calcApp.setOp('*')">×</button>
-        <button class="calc-btn op" onclick="calcApp.setOp('-')">-</button>
+        <button class="calc-btn op" onclick="calcApp.backspace()">⌫</button>
 
-        <button class="calc-btn" onclick="calcApp.append('7')">7</button>
-        <button class="calc-btn" onclick="calcApp.append('8')">8</button>
-        <button class="calc-btn" onclick="calcApp.append('9')">9</button>
+        <button class="calc-btn num" onclick="calcApp.append('7')">7</button>
+        <button class="calc-btn num" onclick="calcApp.append('8')">8</button>
+        <button class="calc-btn num" onclick="calcApp.append('9')">9</button>
+        <button class="calc-btn op" onclick="calcApp.setOp('-')">−</button>
+        
+        <button class="calc-btn num" onclick="calcApp.append('4')">4</button>
+        <button class="calc-btn num" onclick="calcApp.append('5')">5</button>
+        <button class="calc-btn num" onclick="calcApp.append('6')">6</button>
         <button class="calc-btn op" onclick="calcApp.setOp('+')">+</button>
-        
-        <button class="calc-btn" onclick="calcApp.append('4')">4</button>
-        <button class="calc-btn" onclick="calcApp.append('5')">5</button>
-        <button class="calc-btn" onclick="calcApp.append('6')">6</button>
-        <button class="calc-btn op" onclick="calcApp.calc()" style="grid-row: span 2;">=</button>
 
-        <button class="calc-btn" onclick="calcApp.append('1')">1</button>
-        <button class="calc-btn" onclick="calcApp.append('2')">2</button>
-        <button class="calc-btn" onclick="calcApp.append('3')">3</button>
-        
-        <button class="calc-btn" onclick="calcApp.append('0')" style="grid-column: span 2;">0</button>
-        <button class="calc-btn" onclick="calcApp.append('.')">.</button>
-    </div>
-</div>
-
-<script>
-    var calcApp = {
-        current: '', prev: '', op: null,
-        append: function(n) { this.current += n; this.update(); },
-        setOp: function(op) { if (this.current === '') return; if (this.prev !== '') this.calc(); this.op = op; this.prev = this.current; this.current = ''; },
-        calc: function() {
-            const p = parseFloat(this.prev); const c = parseFloat(this.current);
-            if (isNaN(p) || isNaN(c)) return;
-            switch(this.op) { case '+': this.current = String(p + c); break; case '-': this.current = String(p - c); break; case '*': this.current = String(p * c); break; case '/': this.current = String(p / c); break; }
-            this.op = null; this.prev = ''; this.update();
-        },
-        clear: function() { this.current = ''; this.prev = ''; this.op = null; this.update(); },
-        update: function() { const d = document.getElementById('calc-display'); if(d) d.innerText = this.current || '0'; }
-    };
-</script>
+        <button class
