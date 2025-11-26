@@ -1,0 +1,35 @@
+<link rel="stylesheet" href="/tools/password/style.css">
+<h2>パスワード生成</h2>
+<div class="pass-container">
+    <div class="pass-display-group">
+        <input type="text" id="pass-result" readonly placeholder="生成されたパスワード">
+        <button class="icon-btn-copy" onclick="copyPassword()" title="コピー">
+            <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+        </button>
+    </div>
+
+    <div class="pass-settings">
+        <div class="pass-setting-item">
+            <label>長さ: <span id="pass-length-val">12</span>文字</label>
+            <input type="range" id="pass-length" min="4" max="64" value="12" oninput="updateLength(this.value)">
+        </div>
+
+        <div class="pass-options">
+            <label class="checkbox-label">
+                <input type="checkbox" id="use-upper" checked> 英大文字 (A-Z)
+            </label>
+            <label class="checkbox-label">
+                <input type="checkbox" id="use-lower" checked> 英小文字 (a-z)
+            </label>
+            <label class="checkbox-label">
+                <input type="checkbox" id="use-number" checked> 数字 (0-9)
+            </label>
+            <label class="checkbox-label">
+                <input type="checkbox" id="use-symbol"> 記号 (!?@#...)
+            </label>
+        </div>
+    </div>
+
+    <button class="action-btn" onclick="generatePassword()">生成する</button>
+</div>
+<script src="/tools/password/script.js"></script>
