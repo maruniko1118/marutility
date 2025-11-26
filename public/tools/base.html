@@ -1,38 +1,22 @@
+<link rel="stylesheet" href="/tools/base.css">
 <h2>進数変換</h2>
 <div>
-    <label style="display:block; margin-bottom:8px; font-weight:bold;">入力数値</label>
+    <label class="base-label">入力数値</label>
     <input type="text" id="base-input" placeholder="数値を入力">
-
-    <div style="display: flex; gap: 20px; margin-bottom: 20px;">
+    <div class="base-select-group">
         <div style="flex: 1;">
-            <label style="display:block; margin-bottom:8px;">変換元</label>
+            <label class="base-label">変換元</label>
             <select id="base-from"><option value="10">10進数</option><option value="2">2進数</option><option value="8">8進数</option><option value="16">16進数</option></select>
         </div>
         <div style="flex: 1;">
-            <label style="display:block; margin-bottom:8px;">変換先</label>
+            <label class="base-label">変換先</label>
             <select id="base-to"><option value="2">2進数</option><option value="8">8進数</option><option value="10">10進数</option><option value="16">16進数</option></select>
         </div>
     </div>
-
     <button class="action-btn" onclick="convertBase()">変換する</button>
-
-    <div style="margin-top: 30px; border-top: 1px solid #eee; padding-top: 20px;">
+    <div class="base-result-area">
         <span style="color:#666;">結果:</span>
-        <div id="base-result" style="font-size: 2rem; margin-top: 10px; word-break: break-all;">-</div>
+        <div id="base-result" class="base-result-val">-</div>
     </div>
 </div>
-
-<script>
-    function convertBase() {
-        const input = document.getElementById('base-input').value;
-        const fromBase = parseInt(document.getElementById('base-from').value);
-        const toBase = parseInt(document.getElementById('base-to').value);
-        const resultEl = document.getElementById('base-result');
-        if (!input) return;
-        try {
-            const decimalValue = parseInt(input, fromBase);
-            if (isNaN(decimalValue)) { resultEl.innerText = "エラー: 無効な数値"; return; }
-            resultEl.innerText = decimalValue.toString(toBase).toUpperCase();
-        } catch (e) { resultEl.innerText = "エラー"; }
-    }
-</script>
+<script src="/tools/base.js"></script>

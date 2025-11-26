@@ -1,21 +1,11 @@
+<link rel="stylesheet" href="/tools/qr.css">
 <h2>QRコード作成</h2>
 <div>
     <label style="display:block; margin-bottom:8px; font-weight:bold;">URLまたはテキスト</label>
     <input type="text" id="qr-input" placeholder="https://example.com">
-    
     <button class="action-btn" onclick="generateQR()">作成</button>
-
-    <div style="margin-top: 40px; display: flex; justify-content: center;">
+    <div class="qr-container">
         <div id="qrcode"></div>
     </div>
 </div>
-
-<script>
-    function generateQR() {
-        const text = document.getElementById('qr-input').value;
-        const container = document.getElementById('qrcode');
-        container.innerHTML = ""; 
-        if (text.trim() === "") return;
-        new QRCode(container, { text: text, width: 160, height: 160, colorDark : "#000000", colorLight : "#ffffff" });
-    }
-</script>
+<script src="/tools/qr.js"></script>
