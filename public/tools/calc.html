@@ -14,7 +14,7 @@
         flex: 0 0 auto;
         width: 100%;
         max-width: 320px;
-        background: var(--bg-card); /* テーマ対応 */
+        background: var(--bg-card);
         padding: 20px;
         border-radius: 24px;
         box-shadow: 0 4px 15px var(--shadow-color);
@@ -182,9 +182,9 @@
         history: [],
 
         init: function() {
-            // ローカルストレージから履歴読み込み
+            // キー名変更: marutility_calc_history
             try {
-                const saved = localStorage.getItem('mtools_calc_history');
+                const saved = localStorage.getItem('marutility_calc_history');
                 if (saved) this.history = JSON.parse(saved);
             } catch(e) {}
             this.renderHistory();
@@ -192,11 +192,9 @@
 
         append: function(n) {
             if (n === '.' && this.current.includes('.')) return;
-            // 00の処理
             if (n === '00' && (this.current === '' || this.current === '0')) return;
             if (this.current === '0' && n !== '.') this.current = '';
             
-            // %の処理: 即時計算 (現在の値を1/100にする)
             if (n === '%') {
                 if (this.current === '') return;
                 this.current = String(parseFloat(this.current) / 100);
@@ -216,7 +214,7 @@
                 }
                 return;
             }
-            if (this.prev !== '') this.calc(true); // 続けて計算する場合
+            if (this.prev !== '') this.calc(true);
             
             this.op = op;
             this.prev = this.current;
@@ -237,11 +235,9 @@
                 case '/': res = p / c; break;
             }
             
-            // 誤差対策
             res = Math.round(res * 1000000000) / 1000000000;
             const resStr = String(res);
 
-            // 履歴に追加 (連続計算の途中じゃなければ)
             if (!isContinuous) {
                 this.addHistory(`${this.prev} ${this.op} ${this.current} =`, resStr);
             }
@@ -250,7 +246,7 @@
             this.op = null;
             this.prev = '';
             this.update();
-            this.updateSub(); // サブディスプレイ（演算子表示）をクリア
+            this.updateSub();
         },
 
         clear: function() {
@@ -273,10 +269,9 @@
             if(d) d.innerText = this.op ? `${this.prev} ${this.op}` : '';
         },
 
-        // --- 履歴機能 ---
         addHistory: function(expression, result) {
             this.history.unshift({ expr: expression, res: result });
-            if (this.history.length > 20) this.history.pop(); // 最大20件
+            if (this.history.length > 20) this.history.pop();
             this.saveHistory();
             this.renderHistory();
         },
@@ -290,7 +285,7 @@
         },
 
         saveHistory: function() {
-            localStorage.setItem('mtools_calc_history', JSON.stringify(this.history));
+            localStorage.setItem('marutility_calc_history', JSON.stringify(this.history));
         },
 
         renderHistory: function() {
@@ -308,7 +303,6 @@
                 li.className = 'history-item';
                 li.innerHTML = `<div class="history-expr">${item.expr}</div><div class="history-res">${item.res}</div>`;
                 li.onclick = () => {
-                    // 履歴をクリックしたらその値を入力
                     this.current = item.res;
                     this.update();
                 };
@@ -317,6 +311,5 @@
         }
     };
 
-    // 初期化
     calcApp.init();
 </script>

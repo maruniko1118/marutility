@@ -1,7 +1,7 @@
 {
-  "name": "mtools",
+  "name": "marutility",
   "version": "1.0.0",
-  "description": "My Tools Hub",
+  "description": "Web Utility Tools",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
