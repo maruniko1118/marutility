@@ -82,10 +82,21 @@ function handleNav(id) {
 
 async function loadTool(toolId) {
     window.location.hash = toolId;
-    if (toolId === 'home') { renderHome(); return; }
+    const appName = "Marutility";
+
+    if (toolId === 'home') { 
+        document.title = `${appName} - ホーム`;
+        renderHome(); 
+        return; 
+    }
+
+    // タイトル更新 (読み込み前に設定して反応を良くする)
+    const tool = allToolsData.find(t => t.id === toolId);
+    if (tool) {
+        document.title = `${appName} - ${tool.name}`;
+    }
 
     try {
-        // 変更点: ツールごとのフォルダ内の index.html を読み込む
         const path = `/tools/${toolId}/index.html`;
         
         const res = await fetch(path);
@@ -94,7 +105,6 @@ async function loadTool(toolId) {
         app.innerHTML = html;
         executeScripts(app);
 
-        // ヘッダーにお気に入りボタンを追加
         const header = app.querySelector('h2');
         if (header) {
             const favBtn = document.createElement('button');
